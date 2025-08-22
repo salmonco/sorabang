@@ -150,7 +150,7 @@ export default function RadioPage({ params }: { params: Promise<{ roomId: string
     if (isPlaying) {
       setTimeout(async () => {
         try {
-          const nextMessage = roomData.messages[currentIndex + 1];
+          const nextMessage = roomData?.messages[currentIndex + 1];
           if (audio && nextMessage && nextMessage.audioBlob) {
             audio.src = nextMessage.audioBlob;
             audio.load();
@@ -181,7 +181,7 @@ export default function RadioPage({ params }: { params: Promise<{ roomId: string
     if (isPlaying) {
       setTimeout(async () => {
         try {
-          const prevMessage = roomData.messages[currentIndex - 1];
+          const prevMessage = roomData?.messages[currentIndex - 1];
           if (audio && prevMessage && prevMessage.audioBlob) {
             audio.src = prevMessage.audioBlob;
             audio.load();
