@@ -7,6 +7,15 @@ import { Mic, Square, Play, Pause, Send, Music, User } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
+interface VoiceMessage {
+  id: string;
+  nickname: string;
+  audioBlob: string;
+  bgMusic: string;
+  duration: number;
+  createdAt: string;
+}
+
 interface RecordingState {
   isRecording: boolean;
   duration: number;
