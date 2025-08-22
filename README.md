@@ -118,10 +118,6 @@ sorabang/
 
 이 프로젝트는 MIT 라이선스 하에 배포됩니다.
 
-## 📞 연락처
-
-프로젝트 링크: [https://github.com/yourusername/sorabang](https://github.com/yourusername/sorabang)
-
 ---
 
 💝 **소라방**에서 따뜻한 음성 편지를 주고받으세요!
