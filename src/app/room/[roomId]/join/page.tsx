@@ -18,7 +18,7 @@ interface RoomData {
   id: string;
   title: string;
   createdAt: string;
-  messages: any[];
+  messages: VoiceMessage[];
 }
 
 const bgMusicOptions = [
@@ -220,7 +220,7 @@ export default function JoinRoom({ params }: { params: Promise<{ roomId: string 
       // 성공 페이지로 이동
       router.push(`/room/${resolvedParams.roomId}/success`);
       
-    } catch (error) {
+    } catch {
       toast.error('메시지 전송에 실패했습니다.');
     } finally {
       setIsSubmitting(false);

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
-import { Copy, Share2, Radio, Users, Play, Clock, User, Heart, Sparkles } from 'lucide-react';
+import { Copy, Share2, Radio, Users, Play, Clock, User, Heart } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
@@ -51,7 +51,7 @@ export default function RoomManage({ params }: { params: Promise<{ roomId: strin
     try {
       await navigator.clipboard.writeText(shareUrl);
       toast.success('링크가 복사되었습니다! 📋');
-    } catch (error) {
+    } catch {
       toast.error('링크 복사에 실패했습니다.');
     }
   };
@@ -64,7 +64,7 @@ export default function RoomManage({ params }: { params: Promise<{ roomId: strin
           text: '따뜻한 음성 메시지를 남겨주세요!',
           url: shareUrl,
         });
-      } catch (error) {
+      } catch {
         copyToClipboard();
       }
     } else {

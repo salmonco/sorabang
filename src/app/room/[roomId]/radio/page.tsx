@@ -73,7 +73,8 @@ export default function RadioPage({ params }: { params: Promise<{ roomId: string
       setIsPlaying(false);
       if (isAutoPlay && roomData && currentIndex < roomData.messages.length - 1) {
         setTimeout(() => {
-          handleNext();
+          setCurrentIndex(prev => prev + 1);
+          setCurrentTime(0);
         }, 1000);
       }
     };

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
-import { Radio, Users, Link as LinkIcon, Sparkles, Heart, Mic } from 'lucide-react';
+import { Radio, Users, Sparkles, Heart, Mic } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
@@ -41,7 +41,7 @@ export default function Home() {
       // 방 관리 페이지로 이동
       router.push(`/room/${roomId}/manage`);
       
-    } catch (error) {
+    } catch {
       toast.error('모임 생성에 실패했습니다.');
     } finally {
       setIsCreating(false);
@@ -94,7 +94,7 @@ export default function Home() {
             className="glass-warm rounded-2xl p-4 mb-6 border border-yellow-200"
           >
             <p className="handwriting text-2xl text-purple-800 font-semibold">
-              "마음을 녹음하다. 마음을 전하다."
+              &ldquo;마음을 녹음하다. 마음을 전하다.&rdquo;
             </p>
           </motion.div>
         </motion.div>
