@@ -141,13 +141,6 @@ export default function RadioPlayer() {
         {/* 재생 컨트롤 */}
         <div className="flex items-center justify-center space-x-6 mb-6">
           <button
-            onClick={handlePrevious}
-            className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-          >
-            <SkipBack className="text-white" size={24} />
-          </button>
-          
-          <button
             onClick={handlePlayPause}
             className="p-4 bg-white rounded-full hover:bg-gray-100 transition-colors shadow-lg"
           >
@@ -156,13 +149,6 @@ export default function RadioPlayer() {
             ) : (
               <Play className="text-purple-900 ml-1" size={32} />
             )}
-          </button>
-          
-          <button
-            onClick={handleNext}
-            className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-          >
-            <SkipForward className="text-white" size={24} />
           </button>
         </div>
 
@@ -201,37 +187,6 @@ export default function RadioPlayer() {
           src={currentTrackData.url}
           preload="metadata"
         />
-      </div>
-
-      {/* 플레이리스트 */}
-      <div className="mt-8 bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20">
-        <h3 className="text-xl font-bold text-white mb-4">📻 감성 플레이리스트</h3>
-        <div className="space-y-3">
-          {sampleTracks.map((track, index) => (
-            <motion.div
-              key={track.id}
-              className={`flex items-center justify-between p-4 rounded-xl cursor-pointer transition-colors ${
-                index === currentTrack
-                  ? 'bg-white/20 border border-white/30'
-                  : 'bg-white/5 hover:bg-white/10'
-              }`}
-              onClick={() => setCurrentTrack(index)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">{track.id}</span>
-                </div>
-                <div>
-                  <h4 className="text-white font-medium">{track.title}</h4>
-                  <p className="text-purple-200 text-sm">{track.artist}</p>
-                </div>
-              </div>
-              <span className="text-purple-200 text-sm">{track.duration}</span>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </div>
   );

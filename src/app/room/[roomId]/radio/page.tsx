@@ -23,13 +23,7 @@ interface RoomData {
   messages: VoiceMessage[];
 }
 
-const bgMusicNames: { [key: string]: string } = {
-  'none': '배경음악 없음',
-  'gentle': '잔잔한 피아노',
-  'acoustic': '어쿠스틱 기타',
-  'ambient': '따뜻한 앰비언트',
-  'jazz': '부드러운 재즈',
-};
+
 
 export default function RadioPage({ params }: { params: Promise<{ roomId: string }> }) {
   const [roomData, setRoomData] = useState<RoomData | null>(null);
@@ -281,11 +275,6 @@ export default function RadioPage({ params }: { params: Promise<{ roomId: string
                 {currentMessage.nickname}님의 메시지
               </h2>
               <div className="flex items-center justify-center space-x-4 text-purple-200">
-                <div className="flex items-center space-x-1">
-                  <Music size={16} />
-                  <span>{bgMusicNames[currentMessage.bgMusic]}</span>
-                </div>
-                <span>•</span>
                 <span>{new Date(currentMessage.createdAt).toLocaleDateString('ko-KR')}</span>
               </div>
             </motion.div>
@@ -435,9 +424,6 @@ export default function RadioPage({ params }: { params: Promise<{ roomId: string
                   </div>
                   <div>
                     <h4 className="text-white font-medium">{message.nickname}</h4>
-                    <p className="text-purple-200 text-sm">
-                      {bgMusicNames[message.bgMusic]}
-                    </p>
                   </div>
                 </div>
                 <div className="text-right">

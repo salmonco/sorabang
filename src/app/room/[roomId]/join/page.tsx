@@ -30,18 +30,12 @@ interface RoomData {
   messages: VoiceMessage[];
 }
 
-const bgMusicOptions = [
-  { id: 'none', name: '배경음악 없음', preview: null },
-  { id: 'gentle', name: '잔잔한 피아노', preview: '/audio/gentle-piano.mp3' },
-  { id: 'acoustic', name: '어쿠스틱 기타', preview: '/audio/acoustic-guitar.mp3' },
-  { id: 'ambient', name: '따뜻한 앰비언트', preview: '/audio/warm-ambient.mp3' },
-  { id: 'jazz', name: '부드러운 재즈', preview: '/audio/soft-jazz.mp3' },
-];
+
 
 export default function JoinRoom({ params }: { params: Promise<{ roomId: string }> }) {
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [nickname, setNickname] = useState('');
-  const [selectedBgMusic, setSelectedBgMusic] = useState('none');
+  
   const [recording, setRecording] = useState<RecordingState>({
     isRecording: false,
     duration: 0,
@@ -211,7 +205,7 @@ export default function JoinRoom({ params }: { params: Promise<{ roomId: string 
         id: Math.random().toString(36).substring(2, 15),
         nickname: nickname.trim(),
         audioBlob: recording.audioUrl!, // base64 데이터 URL 저장
-        bgMusic: selectedBgMusic,
+        bgMusic: 'none',
         duration: recording.duration,
         createdAt: new Date().toISOString(),
       };
@@ -294,29 +288,7 @@ export default function JoinRoom({ params }: { params: Promise<{ roomId: string 
               />
             </div>
 
-            {/* 배경음악 선택 */}
-            <div>
-              <label className="block text-white font-medium mb-3 flex items-center space-x-2">
-                <Music size={20} />
-                <span>배경음악 선택</span>
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {bgMusicOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => setSelectedBgMusic(option.id)}
-                    className={`p-3 rounded-xl border transition-all text-left ${
-                      selectedBgMusic === option.id
-                        ? 'bg-purple-500/30 border-purple-400 text-white'
-                        : 'bg-white/10 border-white/20 text-purple-200 hover:bg-white/20'
-                    }`}
-                  >
-                    {option.name}
-                  </button>
-                ))}
-              </div>
-            </div>
+            
 
             {/* 음성 녹음 */}
             <div>
