@@ -23,9 +23,10 @@ export default function Home() {
     setIsCreating(true);
 
     try {
+      const roomId = Math.random().toString(36).substring(2, 8);
       const { data, error } = await supabase
         .from("rooms")
-        .insert({ title: roomTitle })
+        .insert({ id: roomId, title: roomTitle })
         .select()
         .single();
 
