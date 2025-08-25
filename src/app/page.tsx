@@ -1,5 +1,6 @@
 "use client";
 
+import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
 import { Heart, Mic, Radio, Sparkles, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -22,39 +23,23 @@ export default function Home() {
     setIsCreating(true);
 
     try {
-      // 고유한 방 ID 생성 (실제로는 서버에서 생성)
-      const roomId = Math.random().toString(36).substring(2, 15);
+      const { data, error } = await supabase
+        .from("rooms")
+        .insert({ title: roomTitle })
+        .select()
+        .single();
 
-      // 방 데이터 생성 (빈 메시지 배열로 시작)
-      const roomData = {
-        id: roomId,
-        title: roomTitle,
-        createdAt: new Date().toISOString(),
-        messages: [],
-      };
-
-      localStorage.setItem(`room_${roomId}`, JSON.stringify(roomData));
+      if (error) throw error;
 
       toast.success("모임이 생성되었습니다! 🎉");
 
-      // 방 관리 페이지로 이동
-      router.push(`/room/${roomId}/manage`);
-    } catch {
+      router.push(`/room/${data.id}/manage`);
+    } catch (error) {
+      console.error("Error creating room:", error);
       toast.error("모임 생성에 실패했습니다.");
     } finally {
       setIsCreating(false);
     }
-  };
-
-  // 개발용: localStorage 초기화 함수
-  const clearAllRooms = () => {
-    const keys = Object.keys(localStorage);
-    keys.forEach((key) => {
-      if (key.startsWith("room_")) {
-        localStorage.removeItem(key);
-      }
-    });
-    toast.success("모든 방 데이터가 초기화되었습니다.");
   };
 
   return (
@@ -201,19 +186,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          {/* 개발용 초기화 버튼 */}
-          {process.env.NODE_ENV === "development" && (
-            <div className="mt-4 pt-4 border-t border-purple-200">
-              <button
-                type="button"
-                onClick={clearAllRooms}
-                className="w-full py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors text-sm"
-              >
-                🗑️ 개발용: 모든 방 데이터 초기화
-              </button>
-            </div>
-          )}
         </motion.div>
 
         {/* 하단 장식 */}

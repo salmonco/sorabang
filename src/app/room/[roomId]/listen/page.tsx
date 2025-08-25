@@ -1,5 +1,6 @@
 "use client";
 
+import { supabase } from "@/lib/supabaseClient";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Pause,
@@ -18,16 +19,15 @@ import toast, { Toaster } from "react-hot-toast";
 interface VoiceMessage {
   id: string;
   nickname: string;
-  audioBlob: string;
-  bgMusic: string;
+  audio_url: string;
   duration: number;
-  createdAt: string;
+  created_at: string;
 }
 
 interface RoomData {
   id: string;
   title: string;
-  createdAt: string;
+  created_at: string;
   messages: VoiceMessage[];
 }
 
@@ -52,19 +52,32 @@ export default function ListenPage({
   useEffect(() => {
     const { roomId } = resolvedParams;
 
-    const savedRoom = localStorage.getItem(`room_${roomId}`);
-    if (savedRoom) {
-      const data = JSON.parse(savedRoom);
-      setRoomData(data);
+    const fetchRoomData = async () => {
+      const { data, error } = await supabase
+        .from("rooms")
+        .select(
+          `
+          *,
+          messages (*)
+        `
+        )
+        .eq("id", roomId)
+        .single();
 
-      if (data.messages.length === 0) {
-        toast.error("아직 받은 메시지가 없습니다.");
-        router.push(`/room/${roomId}/manage`);
+      if (error) {
+        toast.error("방을 찾을 수 없습니다.");
+        router.push("/");
+      } else {
+        if (data.messages.length === 0) {
+          toast.error("아직 받은 메시지가 없습니다.");
+          router.push(`/room/${roomId}/manage`);
+        } else {
+          setRoomData(data);
+        }
       }
-    } else {
-      toast.error("방을 찾을 수 없습니다.");
-      router.push("/");
-    }
+    };
+
+    fetchRoomData();
   }, [resolvedParams, router]);
 
   useEffect(() => {
@@ -110,10 +123,9 @@ export default function ListenPage({
     const audio = audioRef.current;
     if (audio && roomData && roomData.messages[currentIndex]) {
       const currentMessage = roomData.messages[currentIndex];
-      if (currentMessage.audioBlob) {
-        audio.src = currentMessage.audioBlob;
+      if (currentMessage.audio_url) {
+        audio.src = currentMessage.audio_url;
         audio.load();
-        console.log("Audio source updated for index:", currentIndex);
       }
     }
   }, [currentIndex, roomData]);
@@ -128,8 +140,8 @@ export default function ListenPage({
         setIsPlaying(false);
       } else {
         // base64 데이터 URL 직접 사용
-        if (currentMessage.audioBlob) {
-          audio.src = currentMessage.audioBlob;
+        if (currentMessage.audio_url) {
+          audio.src = currentMessage.audio_url;
           audio.load();
         }
 
@@ -159,8 +171,8 @@ export default function ListenPage({
       setTimeout(async () => {
         try {
           const nextMessage = roomData?.messages[currentIndex + 1];
-          if (audio && nextMessage && nextMessage.audioBlob) {
-            audio.src = nextMessage.audioBlob;
+          if (audio && nextMessage && nextMessage.audio_url) {
+            audio.src = nextMessage.audio_url;
             audio.load();
             await audio.play();
             setIsPlaying(true);
@@ -190,8 +202,8 @@ export default function ListenPage({
       setTimeout(async () => {
         try {
           const prevMessage = roomData?.messages[currentIndex - 1];
-          if (audio && prevMessage && prevMessage.audioBlob) {
-            audio.src = prevMessage.audioBlob;
+          if (audio && prevMessage && prevMessage.audio_url) {
+            audio.src = prevMessage.audio_url;
             audio.load();
             await audio.play();
             setIsPlaying(true);
@@ -292,7 +304,7 @@ export default function ListenPage({
               </h2>
               <div className="flex items-center justify-center space-x-4 text-purple-200">
                 <span>
-                  {new Date(currentMessage.createdAt).toLocaleDateString(
+                  {new Date(currentMessage.created_at).toLocaleDateString(
                     "ko-KR"
                   )}
                 </span>
@@ -386,7 +398,7 @@ export default function ListenPage({
           </div>
 
           {/* 숨겨진 오디오 엘리먼트 */}
-          {currentMessage?.audioBlob && (
+          {currentMessage?.audio_url && (
             <audio
               ref={audioRef}
               preload="metadata"
@@ -394,17 +406,13 @@ export default function ListenPage({
                 console.error("Audio element error:", e);
                 console.error(
                   "Current audio source:",
-                  currentMessage?.audioBlob
+                  currentMessage?.audio_url
                 );
                 setIsPlaying(false);
                 toast.error("오디오 재생 중 오류가 발생했습니다.");
               }}
-              onCanPlay={() => {
-                console.log("Audio ready to play");
-              }}
-              onLoadStart={() => {
-                console.log("Audio loading started");
-              }}
+              onCanPlay={() => {}}
+              onLoadStart={() => {}}
             />
           )}
         </motion.div>
@@ -438,13 +446,9 @@ export default function ListenPage({
 
                   // 오디오 소스 즉시 업데이트
                   setTimeout(() => {
-                    if (audio && message.audioBlob) {
-                      audio.src = message.audioBlob;
+                    if (audio && message.audio_url) {
+                      audio.src = message.audio_url;
                       audio.load();
-                      console.log(
-                        "Playlist item clicked, audio source updated:",
-                        index
-                      );
                     }
                   }, 50);
                 }}

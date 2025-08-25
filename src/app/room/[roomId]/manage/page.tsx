@@ -1,5 +1,6 @@
 "use client";
 
+import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
 import {
   Clock,
@@ -21,16 +22,15 @@ import toast, { Toaster } from "react-hot-toast";
 interface VoiceMessage {
   id: string;
   nickname: string;
-  audioBlob: string;
-  bgMusic: string;
+  audio_url: string;
   duration: number;
-  createdAt: string;
+  created_at: string;
 }
 
 interface RoomData {
   id: string;
   title: string;
-  createdAt: string;
+  created_at: string;
   messages: VoiceMessage[];
 }
 
@@ -70,20 +70,30 @@ export default function RoomManage({
   useEffect(() => {
     const { roomId } = resolvedParams;
 
-    // 로컬 스토리지에서 방 데이터 로드
-    const savedRoom = localStorage.getItem(`room_${roomId}`);
-    if (savedRoom) {
-      const data = JSON.parse(savedRoom);
-      setRoomData(data);
+    const fetchRoomData = async () => {
+      const { data, error } = await supabase
+        .from("rooms")
+        .select(
+          `
+          *,
+          messages (*)
+        `
+        )
+        .eq("id", roomId)
+        .single();
 
-      // 공유 URL 생성
-      const baseUrl = window.location.origin;
-      setShareUrl(`${baseUrl}/room/${roomId}/manage`);
-      setListenUrl(`${baseUrl}/room/${roomId}/listen`);
-    } else {
-      toast.error("방을 찾을 수 없습니다.");
-      router.push("/");
-    }
+      if (error) {
+        toast.error("방을 찾을 수 없습니다.");
+        router.push("/");
+      } else {
+        setRoomData(data);
+        const baseUrl = window.location.origin;
+        setShareUrl(`${baseUrl}/room/${roomId}/manage`);
+        setListenUrl(`${baseUrl}/room/${roomId}/listen`);
+      }
+    };
+
+    fetchRoomData();
   }, [resolvedParams, router]);
 
   const copyToClipboard = async (text: string, label: string) => {
@@ -109,10 +119,6 @@ export default function RoomManage({
     } else {
       copyToClipboard(text, title);
     }
-  };
-
-  const goToRadio = () => {
-    router.push(`/room/${resolvedParams.roomId}/radio`);
   };
 
   const startRecording = async () => {
@@ -233,25 +239,37 @@ export default function RoomManage({
     setIsSubmitting(true);
 
     try {
+      const audioFile = new File([recording.audioBlob], `${Date.now()}.webm`, {
+        type: "audio/webm",
+      });
+      const { data: fileData, error: fileError } = await supabase.storage
+        .from("voice-messages")
+        .upload(`${roomData!.id}/${audioFile.name}`, audioFile);
+
+      if (fileError) throw fileError;
+
+      const { data: urlData } = supabase.storage
+        .from("voice-messages")
+        .getPublicUrl(fileData.path);
+
       const newMessage = {
-        id: Math.random().toString(36).substring(2, 15),
+        room_id: roomData!.id,
         nickname: nickname.trim(),
-        audioBlob: recording.audioUrl!,
-        bgMusic: "none",
+        audio_url: urlData.publicUrl,
         duration: recording.duration,
-        createdAt: new Date().toISOString(),
       };
 
-      const updatedRoom = {
-        ...roomData!,
-        messages: [...roomData!.messages, newMessage],
-      };
+      const { data: messageData, error: messageError } = await supabase
+        .from("messages")
+        .insert(newMessage)
+        .select()
+        .single();
 
-      localStorage.setItem(
-        `room_${resolvedParams.roomId}`,
-        JSON.stringify(updatedRoom)
+      if (messageError) throw messageError;
+
+      setRoomData((prev) =>
+        prev ? { ...prev, messages: [...prev.messages, messageData] } : null
       );
-      setRoomData(updatedRoom);
 
       toast.success("음성 메시지가 추가되었습니다! 💌");
 
@@ -267,7 +285,8 @@ export default function RoomManage({
       // Show confetti
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
-    } catch {
+    } catch (error) {
+      console.error("Error submitting message:", error);
       toast.error("메시지 추가에 실패했습니다.");
     } finally {
       setIsSubmitting(false);
@@ -313,7 +332,7 @@ export default function RoomManage({
             {roomData.title}
           </h1>
           <p className="text-purple-600">
-            생성일: {new Date(roomData.createdAt).toLocaleDateString("ko-KR")}
+            생성일: {new Date(roomData.created_at).toLocaleDateString("ko-KR")}
           </p>
         </motion.div>
 
@@ -570,7 +589,7 @@ export default function RoomManage({
                           {message.nickname}
                         </p>
                         <p className="text-purple-600 text-sm">
-                          {new Date(message.createdAt).toLocaleString("ko-KR")}
+                          {new Date(message.created_at).toLocaleString("ko-KR")}
                         </p>
                       </div>
                     </div>
