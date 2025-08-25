@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Caveat:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Caveat:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -23,7 +23,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 body {
@@ -33,7 +33,7 @@ body {
 }
 
 .handwriting {
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
 }
 
 a {
@@ -47,13 +47,11 @@ a {
   border: 2px solid #d1d5db;
   border-radius: 12px;
   position: relative;
-  box-shadow: 
-    inset 0 2px 4px rgba(0,0,0,0.1),
-    0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .cassette-tape::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 20%;
@@ -67,14 +65,13 @@ a {
 .vintage-radio {
   background: linear-gradient(145deg, #a78bfa, #8b5cf6);
   border-radius: 20px;
-  box-shadow: 
-    0 8px 32px rgba(139, 92, 246, 0.3),
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   position: relative;
 }
 
 .vintage-radio::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 10px;
   left: 10px;
@@ -99,17 +96,45 @@ a {
   animation: heartbeat 1.5s ease-in-out infinite;
 }
 
-.heartwave-bar:nth-child(1) { height: 10px; animation-delay: 0s; }
-.heartwave-bar:nth-child(2) { height: 20px; animation-delay: 0.1s; }
-.heartwave-bar:nth-child(3) { height: 35px; animation-delay: 0.2s; }
-.heartwave-bar:nth-child(4) { height: 25px; animation-delay: 0.3s; }
-.heartwave-bar:nth-child(5) { height: 40px; animation-delay: 0.4s; }
-.heartwave-bar:nth-child(6) { height: 15px; animation-delay: 0.5s; }
-.heartwave-bar:nth-child(7) { height: 25px; animation-delay: 0.6s; }
+.heartwave-bar:nth-child(1) {
+  height: 10px;
+  animation-delay: 0s;
+}
+.heartwave-bar:nth-child(2) {
+  height: 20px;
+  animation-delay: 0.1s;
+}
+.heartwave-bar:nth-child(3) {
+  height: 35px;
+  animation-delay: 0.2s;
+}
+.heartwave-bar:nth-child(4) {
+  height: 25px;
+  animation-delay: 0.3s;
+}
+.heartwave-bar:nth-child(5) {
+  height: 40px;
+  animation-delay: 0.4s;
+}
+.heartwave-bar:nth-child(6) {
+  height: 15px;
+  animation-delay: 0.5s;
+}
+.heartwave-bar:nth-child(7) {
+  height: 25px;
+  animation-delay: 0.6s;
+}
 
 @keyframes heartbeat {
-  0%, 100% { transform: scaleY(0.5); opacity: 0.7; }
-  50% { transform: scaleY(1); opacity: 1; }
+  0%,
+  100% {
+    transform: scaleY(0.5);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
 }
 
 /* 커스텀 스크롤바 */
@@ -242,8 +267,12 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* 미디어 쿼리 */

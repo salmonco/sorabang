@@ -1,48 +1,46 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Toaster } from 'react-hot-toast';
-import { Radio, Users, Sparkles, Heart, Mic } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import { motion } from "framer-motion";
+import { Heart, Mic, Radio, Sparkles, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
-  const [roomTitle, setRoomTitle] = useState('');
+  const [roomTitle, setRoomTitle] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const router = useRouter();
 
   const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!roomTitle.trim()) {
-      toast.error('모임 제목을 입력해주세요.');
+      toast.error("모임 제목을 입력해주세요.");
       return;
     }
 
     setIsCreating(true);
-    
+
     try {
       // 고유한 방 ID 생성 (실제로는 서버에서 생성)
       const roomId = Math.random().toString(36).substring(2, 15);
-      
+
       // 방 데이터 생성 (빈 메시지 배열로 시작)
       const roomData = {
         id: roomId,
         title: roomTitle,
         createdAt: new Date().toISOString(),
-        messages: []
+        messages: [],
       };
-      
+
       localStorage.setItem(`room_${roomId}`, JSON.stringify(roomData));
-      
-      toast.success('모임이 생성되었습니다! 🎉');
-      
+
+      toast.success("모임이 생성되었습니다! 🎉");
+
       // 방 관리 페이지로 이동
       router.push(`/room/${roomId}/manage`);
-      
     } catch {
-      toast.error('모임 생성에 실패했습니다.');
+      toast.error("모임 생성에 실패했습니다.");
     } finally {
       setIsCreating(false);
     }
@@ -51,18 +49,18 @@ export default function Home() {
   // 개발용: localStorage 초기화 함수
   const clearAllRooms = () => {
     const keys = Object.keys(localStorage);
-    keys.forEach(key => {
-      if (key.startsWith('room_')) {
+    keys.forEach((key) => {
+      if (key.startsWith("room_")) {
         localStorage.removeItem(key);
       }
     });
-    toast.success('모든 방 데이터가 초기화되었습니다.');
+    toast.success("모든 방 데이터가 초기화되었습니다.");
   };
 
   return (
     <div className="min-h-screen warm-gradient flex items-center justify-center p-4">
       <Toaster position="top-right" />
-      
+
       <div className="w-full max-w-2xl">
         {/* 헤더 */}
         <motion.div
@@ -79,13 +77,17 @@ export default function Home() {
               📻
             </motion.div>
           </div>
-          
+
           <h1 className="handwriting text-7xl font-bold gradient-text mb-4">
             소라방
           </h1>
-          <p className="text-purple-700 text-xl mb-2 font-medium">소리 라디오 방</p>
-          <p className="text-purple-600 text-lg mb-4">나만을 위한 비밀 라디오 방송</p>
-          
+          <p className="text-purple-700 text-xl mb-2 font-medium">
+            소리 라디오 방
+          </p>
+          <p className="text-purple-600 text-lg mb-4">
+            나만을 위한 비밀 라디오 방송
+          </p>
+
           {/* 브랜드 슬로건 */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -157,14 +159,19 @@ export default function Home() {
 
           {/* 기능 설명 */}
           <div className="mt-8 pt-8 border-t border-purple-200">
-            <h3 className="text-purple-800 font-medium mb-4 text-center handwriting text-xl">어떻게 작동하나요?</h3>
+            <h3 className="text-purple-800 font-medium mb-4 text-center handwriting text-xl">
+              어떻게 작동하나요?
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div className="text-center">
                 <div className="cassette-tape w-12 h-12 flex items-center justify-center mx-auto mb-2">
                   <Users className="text-purple-600" size={20} />
                 </div>
                 <p className="text-purple-600">
-                  <span className="font-medium text-purple-800">1. 모임 생성</span><br />
+                  <span className="font-medium text-purple-800">
+                    1. 모임 생성
+                  </span>
+                  <br />
                   제목을 입력하고 링크를 만들어요
                 </p>
               </div>
@@ -173,7 +180,10 @@ export default function Home() {
                   <Mic className="text-pink-500" size={20} />
                 </div>
                 <p className="text-purple-600">
-                  <span className="font-medium text-purple-800">2. 친구 초대</span><br />
+                  <span className="font-medium text-purple-800">
+                    2. 친구 초대
+                  </span>
+                  <br />
                   링크를 공유해서 음성메시지를 받아요
                 </p>
               </div>
@@ -182,7 +192,10 @@ export default function Home() {
                   <Radio className="text-orange-500" size={20} />
                 </div>
                 <p className="text-purple-600">
-                  <span className="font-medium text-purple-800">3. 라디오 감상</span><br />
+                  <span className="font-medium text-purple-800">
+                    3. 라디오 감상
+                  </span>
+                  <br />
                   모든 메시지를 라디오처럼 들어요
                 </p>
               </div>
@@ -190,7 +203,7 @@ export default function Home() {
           </div>
 
           {/* 개발용 초기화 버튼 */}
-          {process.env.NODE_ENV === 'development' && (
+          {process.env.NODE_ENV === "development" && (
             <div className="mt-4 pt-4 border-t border-purple-200">
               <button
                 type="button"
