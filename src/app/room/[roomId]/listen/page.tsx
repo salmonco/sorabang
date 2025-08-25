@@ -96,6 +96,7 @@ export default function ListenPage({
         setTimeout(() => {
           setCurrentIndex((prev) => prev + 1);
           setCurrentTime(0);
+          setIsPlaying(true); // Start playing the next track
         }, 1000);
       }
     };
@@ -126,9 +127,12 @@ export default function ListenPage({
       if (currentMessage.audio_url) {
         audio.src = currentMessage.audio_url;
         audio.load();
+        if (isPlaying) {
+          audio.play().catch((e) => console.error("Auto-play error:", e));
+        }
       }
     }
-  }, [currentIndex, roomData]);
+  }, [currentIndex, roomData, isPlaying]);
 
   const handlePlayPause = async () => {
     const audio = audioRef.current;
