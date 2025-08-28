@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
 import { initAmplitude } from "@/lib/analytics";
+import { useEffect } from "react";
 
-export default function AmplitudeInitializer() {
+export const AmplitudeInitializer = () => {
   useEffect(() => {
     initAmplitude();
   }, []);
 
   return null;
-}
+};

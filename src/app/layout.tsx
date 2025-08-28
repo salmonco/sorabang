@@ -1,6 +1,7 @@
-import AmplitudeInitializer from "@/clientBoundary/AmplitudeInitializerClient";
+import { AmplitudeInitializer } from "@/app/_clientBoundary/AmplitudeInitializerClient";
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
+import { ReactNode } from "react";
 import "./globals.css";
 
 const notoSansKR = Noto_Sans_KR({
@@ -29,11 +30,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+type Props = {
+  children: ReactNode;
+};
+
+const RootLayout = ({ children }: Props) => {
   return (
     <html lang="ko" className={notoSansKR.className}>
       <head>
@@ -51,4 +52,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
