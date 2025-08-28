@@ -19,13 +19,19 @@ export const initAmplitude = () => {
   }
 };
 
+const commonProperties = {
+  web_deploy_version: process.env.NEXT_PUBLIC_WEB_DEPLOY_VERSION || "unknown",
+  timestamp: new Date().toISOString(),
+};
+
 export const logAmplitudeEvent = (
   eventName: string,
   eventProperties?: Record<string, unknown>
 ) => {
   if (AMPLITUDE_API_KEY) {
-    console.log(`Logging Amplitude Event: ${eventName}`, eventProperties);
-    amplitude.getInstance().logEvent(eventName, eventProperties);
+    const properties = { ...commonProperties, ...eventProperties };
+    console.log(`Logging Amplitude Event: ${eventName}`, properties);
+    amplitude.getInstance().logEvent(eventName, properties);
   } else {
     console.warn(
       `Amplitude API Key is not set. Event "${eventName}" will not be sent.`
