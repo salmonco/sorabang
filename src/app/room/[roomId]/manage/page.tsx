@@ -1,5 +1,6 @@
 "use client";
 
+import { TrackPageView } from "@/app/_shared/clientBoundary/TrackPageView";
 import { logAmplitudeEvent } from "@/lib/analytics";
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
@@ -321,332 +322,342 @@ const RoomManagePage = ({
   }
 
   return (
-    <div className="min-h-screen warm-gradient p-4">
-      {showConfetti && <Confetti />}
-      <Toaster position="top-right" />
+    <>
+      <div className="min-h-screen warm-gradient p-4">
+        {showConfetti && <Confetti />}
+        <Toaster position="top-right" />
 
-      <div className="max-w-4xl mx-auto">
-        {/* 헤더 */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <div className="mb-4">
+        <div className="max-w-4xl mx-auto">
+          {/* 헤더 */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8"
+          >
+            <div className="mb-4">
+              <motion.div
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="inline-block text-6xl"
+              >
+                💌
+              </motion.div>
+            </div>
+            <h1 className="handwriting text-5xl font-bold gradient-text mb-2">
+              {roomData.title}
+            </h1>
+            <p className="text-purple-600">
+              생성일:{" "}
+              {new Date(roomData.created_at).toLocaleDateString("ko-KR")}
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* 링크 공유 카드 */}
             <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="inline-block text-6xl"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="glass-warm rounded-3xl p-6 border border-yellow-200 warm-shadow"
             >
-              💌
-            </motion.div>
-          </div>
-          <h1 className="handwriting text-5xl font-bold gradient-text mb-2">
-            {roomData.title}
-          </h1>
-          <p className="text-purple-600">
-            생성일: {new Date(roomData.created_at).toLocaleDateString("ko-KR")}
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* 링크 공유 카드 */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="glass-warm rounded-3xl p-6 border border-yellow-200 warm-shadow"
-          >
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Share2 className="text-white" size={24} />
-              </div>
-              <h2 className="handwriting text-2xl font-bold text-purple-800 mb-2">
-                음성 녹음 및 관리
-              </h2>
-              <p className="text-purple-600 text-sm">
-                이 링크를 친구들에게 공유해서 음성 메시지를 받아보세요.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="glass-purple rounded-xl p-4 border border-purple-200">
-                <p className="text-purple-700 text-sm break-all font-mono">
-                  {shareUrl}
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Share2 className="text-white" size={24} />
+                </div>
+                <h2 className="handwriting text-2xl font-bold text-purple-800 mb-2">
+                  음성 녹음 및 관리
+                </h2>
+                <p className="text-purple-600 text-sm">
+                  이 링크를 친구들에게 공유해서 음성 메시지를 받아보세요.
                 </p>
               </div>
 
-              <div className="flex space-x-3">
-                <button
-                  onClick={() => copyToClipboard(shareUrl, "녹음 및 관리")}
-                  className="flex-1 py-3 glass-purple text-purple-700 rounded-xl hover:bg-purple-100 transition-colors flex items-center justify-center space-x-2 border border-purple-200"
-                >
-                  <Copy size={18} />
-                  <span>복사</span>
-                </button>
-                <button
-                  onClick={() => shareLink(shareUrl, "녹음 및 관리")}
-                  className="flex-1 py-3 cream-gradient text-purple-800 rounded-xl hover:shadow-lg transition-all flex items-center justify-center space-x-2 font-medium"
-                >
-                  <Share2 size={18} />
-                  <span>공유</span>
-                </button>
-              </div>
-            </div>
-          </motion.div>
+              <div className="space-y-4">
+                <div className="glass-purple rounded-xl p-4 border border-purple-200">
+                  <p className="text-purple-700 text-sm break-all font-mono">
+                    {shareUrl}
+                  </p>
+                </div>
 
-          {/* 편지 듣기 링크 공유 */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="glass-purple rounded-3xl p-6 border border-purple-200 purple-shadow"
-          >
-            <div className="text-center mb-6">
-              <div className="cassette-tape w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Mail className="text-purple-600" size={24} />
-              </div>
-              <h2 className="handwriting text-2xl font-bold text-purple-800 mb-2">
-                편지 듣기
-              </h2>
-              <p className="text-purple-600 text-sm">
-                모든 음성 메시지를 편지처럼 들으려면 이 링크를 공유하세요.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="glass-purple rounded-xl p-4 border border-purple-200">
-                <p className="text-purple-700 text-sm break-all font-mono">
-                  {listenUrl}
-                </p>
-              </div>
-
-              <div className="flex space-x-3">
-                <button
-                  onClick={() => copyToClipboard(listenUrl, "편지 듣기")}
-                  className="flex-1 py-3 glass-purple text-purple-700 rounded-xl hover:bg-purple-100 transition-colors flex items-center justify-center space-x-2 border border-purple-200"
-                >
-                  <Copy size={18} />
-                  <span>복사</span>
-                </button>
-                <button
-                  onClick={() => shareLink(listenUrl, "편지 듣기")}
-                  className="flex-1 py-3 cream-gradient text-purple-800 rounded-xl hover:shadow-lg transition-all flex items-center justify-center space-x-2 font-medium"
-                >
-                  <Share2 size={18} />
-                  <span>공유</span>
-                </button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* 음성 녹음 카드 */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="glass-purple rounded-3xl p-6 border border-purple-200 purple-shadow"
-          >
-            <div className="text-center mb-6">
-              <div className="cassette-tape w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Mic className="text-purple-600" size={24} />
-              </div>
-              <h2 className="handwriting text-2xl font-bold text-purple-800 mb-2">
-                음성 메시지 남기기
-              </h2>
-              <p className="text-purple-600 text-sm">
-                직접 음성 메시지를 녹음할 수 있습니다.
-              </p>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label
-                  className="text-purple-800 font-medium mb-2 flex items-center space-x-2"
-                  htmlFor="nickname"
-                >
-                  <User size={16} />
-                  <span>닉네임</span>
-                </label>
-                <input
-                  type="text"
-                  name="nickname"
-                  id="nickname"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                  placeholder="닉네임을 입력하세요"
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-purple-800 placeholder-purple-400 focus:outline-none focus:border-purple-400 focus:bg-white/20 transition-all"
-                  disabled={isSubmitting}
-                  maxLength={20}
-                />
-              </div>
-              <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-                <div className="text-center">
-                  {!recording.isRecording && !recording.audioBlob && (
-                    <motion.button
-                      type="button"
-                      onClick={startRecording}
-                      className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg mx-auto"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Mic className="text-white" size={24} />
-                    </motion.button>
-                  )}
-
-                  {recording.isRecording && (
-                    <div className="space-y-2">
-                      <motion.div
-                        className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto"
-                        animate={{ scale: [1, 1.1, 1] }}
-                        transition={{ duration: 1, repeat: Infinity }}
-                      >
-                        <Mic className="text-white" size={24} />
-                      </motion.div>
-                      <p className="text-white font-medium">
-                        녹음 중... {formatTime(recording.duration)}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={stopRecording}
-                        className="px-4 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
-                      >
-                        <Square className="inline mr-1" size={12} />
-                        녹음 중지
-                      </button>
-                    </div>
-                  )}
-
-                  {recording.audioBlob && (
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-center space-x-2">
-                        <button
-                          type="button"
-                          onClick={playRecording}
-                          className="p-2 bg-purple-500 rounded-full hover:bg-purple-600 transition-colors"
-                        >
-                          {isPlaying ? (
-                            <Pause className="text-white" size={16} />
-                          ) : (
-                            <Play className="text-white" size={16} />
-                          )}
-                        </button>
-                        <span className="text-purple-600 text-sm">
-                          녹음 시간: {formatTime(recording.duration)}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setRecording({
-                              isRecording: false,
-                              duration: 0,
-                              audioBlob: null,
-                              audioUrl: null,
-                            });
-                            setIsPlaying(false);
-                          }}
-                          className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-xs"
-                        >
-                          재녹음
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => copyToClipboard(shareUrl, "녹음 및 관리")}
+                    className="flex-1 py-3 glass-purple text-purple-700 rounded-xl hover:bg-purple-100 transition-colors flex items-center justify-center space-x-2 border border-purple-200"
+                  >
+                    <Copy size={18} />
+                    <span>복사</span>
+                  </button>
+                  <button
+                    onClick={() => shareLink(shareUrl, "녹음 및 관리")}
+                    className="flex-1 py-3 cream-gradient text-purple-800 rounded-xl hover:shadow-lg transition-all flex items-center justify-center space-x-2 font-medium"
+                  >
+                    <Share2 size={18} />
+                    <span>공유</span>
+                  </button>
                 </div>
               </div>
-              <motion.button
-                type="submit"
-                disabled={
-                  isSubmitting || !recording.audioBlob || !nickname.trim()
-                }
-                className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-              >
-                {isSubmitting ? "저장 중..." : "메시지 남기기"}
-              </motion.button>
-            </form>
-            {recording.audioUrl && (
-              <audio
-                ref={audioRef}
-                src={recording.audioUrl}
-                onEnded={() => setIsPlaying(false)}
-              />
-            )}
+            </motion.div>
+
+            {/* 편지 듣기 링크 공유 */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="glass-purple rounded-3xl p-6 border border-purple-200 purple-shadow"
+            >
+              <div className="text-center mb-6">
+                <div className="cassette-tape w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Mail className="text-purple-600" size={24} />
+                </div>
+                <h2 className="handwriting text-2xl font-bold text-purple-800 mb-2">
+                  편지 듣기
+                </h2>
+                <p className="text-purple-600 text-sm">
+                  모든 음성 메시지를 편지처럼 들으려면 이 링크를 공유하세요.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="glass-purple rounded-xl p-4 border border-purple-200">
+                  <p className="text-purple-700 text-sm break-all font-mono">
+                    {listenUrl}
+                  </p>
+                </div>
+
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => copyToClipboard(listenUrl, "편지 듣기")}
+                    className="flex-1 py-3 glass-purple text-purple-700 rounded-xl hover:bg-purple-100 transition-colors flex items-center justify-center space-x-2 border border-purple-200"
+                  >
+                    <Copy size={18} />
+                    <span>복사</span>
+                  </button>
+                  <button
+                    onClick={() => shareLink(listenUrl, "편지 듣기")}
+                    className="flex-1 py-3 cream-gradient text-purple-800 rounded-xl hover:shadow-lg transition-all flex items-center justify-center space-x-2 font-medium"
+                  >
+                    <Share2 size={18} />
+                    <span>공유</span>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 음성 녹음 카드 */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+              className="glass-purple rounded-3xl p-6 border border-purple-200 purple-shadow"
+            >
+              <div className="text-center mb-6">
+                <div className="cassette-tape w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Mic className="text-purple-600" size={24} />
+                </div>
+                <h2 className="handwriting text-2xl font-bold text-purple-800 mb-2">
+                  음성 메시지 남기기
+                </h2>
+                <p className="text-purple-600 text-sm">
+                  직접 음성 메시지를 녹음할 수 있습니다.
+                </p>
+              </div>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label
+                    className="text-purple-800 font-medium mb-2 flex items-center space-x-2"
+                    htmlFor="nickname"
+                  >
+                    <User size={16} />
+                    <span>닉네임</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="nickname"
+                    id="nickname"
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value)}
+                    placeholder="닉네임을 입력하세요"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-purple-800 placeholder-purple-400 focus:outline-none focus:border-purple-400 focus:bg-white/20 transition-all"
+                    disabled={isSubmitting}
+                    maxLength={20}
+                  />
+                </div>
+                <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                  <div className="text-center">
+                    {!recording.isRecording && !recording.audioBlob && (
+                      <motion.button
+                        type="button"
+                        onClick={startRecording}
+                        className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg mx-auto"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Mic className="text-white" size={24} />
+                      </motion.button>
+                    )}
+
+                    {recording.isRecording && (
+                      <div className="space-y-2">
+                        <motion.div
+                          className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto"
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 1, repeat: Infinity }}
+                        >
+                          <Mic className="text-white" size={24} />
+                        </motion.div>
+                        <p className="text-white font-medium">
+                          녹음 중... {formatTime(recording.duration)}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={stopRecording}
+                          className="px-4 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                        >
+                          <Square className="inline mr-1" size={12} />
+                          녹음 중지
+                        </button>
+                      </div>
+                    )}
+
+                    {recording.audioBlob && (
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-center space-x-2">
+                          <button
+                            type="button"
+                            onClick={playRecording}
+                            className="p-2 bg-purple-500 rounded-full hover:bg-purple-600 transition-colors"
+                          >
+                            {isPlaying ? (
+                              <Pause className="text-white" size={16} />
+                            ) : (
+                              <Play className="text-white" size={16} />
+                            )}
+                          </button>
+                          <span className="text-purple-600 text-sm">
+                            녹음 시간: {formatTime(recording.duration)}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setRecording({
+                                isRecording: false,
+                                duration: 0,
+                                audioBlob: null,
+                                audioUrl: null,
+                              });
+                              setIsPlaying(false);
+                            }}
+                            className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-xs"
+                          >
+                            재녹음
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <motion.button
+                  type="submit"
+                  disabled={
+                    isSubmitting || !recording.audioBlob || !nickname.trim()
+                  }
+                  className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                >
+                  {isSubmitting ? "저장 중..." : "메시지 남기기"}
+                </motion.button>
+              </form>
+              {recording.audioUrl && (
+                <audio
+                  ref={audioRef}
+                  src={recording.audioUrl}
+                  onEnded={() => setIsPlaying(false)}
+                />
+              )}
+            </motion.div>
+          </div>
+
+          {/* 받은 메시지 목록 */}
+          {roomData.messages.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-8 glass-warm rounded-3xl p-6 border border-yellow-200 warm-shadow"
+            >
+              <h3 className="handwriting text-2xl font-bold text-purple-800 mb-6 flex items-center space-x-2">
+                <Users size={20} />
+                <span>받은 음성 메시지</span>
+              </h3>
+
+              <div className="space-y-4">
+                {roomData.messages.map((message, index) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="glass-purple rounded-xl p-4 border border-purple-200 hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="cassette-tape w-10 h-10 flex items-center justify-center">
+                          <User className="text-purple-600" size={16} />
+                        </div>
+                        <div>
+                          <p className="text-purple-800 font-medium">
+                            {message.nickname}
+                          </p>
+                          <p className="text-purple-600 text-sm">
+                            {new Date(message.created_at).toLocaleString(
+                              "ko-KR"
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2 text-purple-600 text-sm">
+                        <Clock size={14} />
+                        <span>
+                          {Math.floor(message.duration / 60)}:
+                          {(message.duration % 60).toString().padStart(2, "0")}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* 하단 장식 */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-8 text-center"
+          >
+            <div className="heartwave mb-4">
+              <div className="heartwave-bar"></div>
+              <div className="heartwave-bar"></div>
+              <div className="heartwave-bar"></div>
+              <div className="heartwave-bar"></div>
+              <div className="heartwave-bar"></div>
+              <div className="heartwave-bar"></div>
+              <div className="heartwave-bar"></div>
+            </div>
+            <p className="handwriting text-purple-600 text-lg">
+              소리로 전하는 마음, 하루가 특별해지는 마법 ✨
+            </p>
           </motion.div>
         </div>
-
-        {/* 받은 메시지 목록 */}
-        {roomData.messages.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mt-8 glass-warm rounded-3xl p-6 border border-yellow-200 warm-shadow"
-          >
-            <h3 className="handwriting text-2xl font-bold text-purple-800 mb-6 flex items-center space-x-2">
-              <Users size={20} />
-              <span>받은 음성 메시지</span>
-            </h3>
-
-            <div className="space-y-4">
-              {roomData.messages.map((message, index) => (
-                <motion.div
-                  key={message.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="glass-purple rounded-xl p-4 border border-purple-200 hover:shadow-md transition-all"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="cassette-tape w-10 h-10 flex items-center justify-center">
-                        <User className="text-purple-600" size={16} />
-                      </div>
-                      <div>
-                        <p className="text-purple-800 font-medium">
-                          {message.nickname}
-                        </p>
-                        <p className="text-purple-600 text-sm">
-                          {new Date(message.created_at).toLocaleString("ko-KR")}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2 text-purple-600 text-sm">
-                      <Clock size={14} />
-                      <span>
-                        {Math.floor(message.duration / 60)}:
-                        {(message.duration % 60).toString().padStart(2, "0")}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* 하단 장식 */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-8 text-center"
-        >
-          <div className="heartwave mb-4">
-            <div className="heartwave-bar"></div>
-            <div className="heartwave-bar"></div>
-            <div className="heartwave-bar"></div>
-            <div className="heartwave-bar"></div>
-            <div className="heartwave-bar"></div>
-            <div className="heartwave-bar"></div>
-            <div className="heartwave-bar"></div>
-          </div>
-          <p className="handwriting text-purple-600 text-lg">
-            소리로 전하는 마음, 하루가 특별해지는 마법 ✨
-          </p>
-        </motion.div>
       </div>
-    </div>
+      <TrackPageView />
+    </>
   );
 };
 
