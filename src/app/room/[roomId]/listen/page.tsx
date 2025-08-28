@@ -1,5 +1,6 @@
 "use client";
 
+import { logAmplitudeEvent } from "@/lib/analytics";
 import { supabase } from "@/lib/supabaseClient";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -129,6 +130,8 @@ export default function ListenPage({
         audio.load();
         if (isPlaying) {
           audio.play().catch((e) => console.error("Auto-play error:", e));
+          // 녹음 한 개당 평균 청취 횟수
+          logAmplitudeEvent("audio_played", { messageId: currentMessage.id });
         }
       }
     }

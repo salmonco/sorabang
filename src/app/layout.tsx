@@ -1,3 +1,4 @@
+import AmplitudeInitializer from "@/clientBoundary/AmplitudeInitializerClient";
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
@@ -44,7 +45,10 @@ export default function RootLayout({
           content="black-translucent"
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AmplitudeInitializer />
+        {children}
+      </body>
     </html>
   );
 }

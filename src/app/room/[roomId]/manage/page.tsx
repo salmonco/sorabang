@@ -1,5 +1,6 @@
 "use client";
 
+import { logAmplitudeEvent } from "@/lib/analytics";
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
 import {
@@ -184,6 +185,11 @@ export default function RoomManage({
       }, 1000);
 
       toast.success("녹음이 시작되었습니다. (최대 2분)");
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("ref") === "shared") {
+        // 초대링크로 들어온 사람의 녹음 클릭율
+        logAmplitudeEvent("recording_button_clicked", { ref: "shared" });
+      }
     } catch (error) {
       console.error("Recording error:", error);
       toast.error("마이크 접근 권한이 필요합니다.");
@@ -272,6 +278,13 @@ export default function RoomManage({
       );
 
       toast.success("음성 메시지가 추가되었습니다! 💌");
+      const urlParams = new URLSearchParams(window.location.search);
+      const eventProperties: Record<string, string> = {};
+      if (urlParams.get("ref") === "shared") {
+        eventProperties.ref = "shared";
+      }
+      // 초대링크로 들어온 사람의 녹음 참여율, 한 사람당 평균 녹음 수
+      logAmplitudeEvent("recording_submitted", eventProperties);
 
       // Reset recording state
       setRecording({
