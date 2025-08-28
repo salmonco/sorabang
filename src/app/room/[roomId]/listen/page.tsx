@@ -439,7 +439,13 @@ const ListenPage = ({ params }: { params: Promise<{ roomId: string }> }) => {
                 <input
                   type="checkbox"
                   checked={isAutoPlay}
-                  onChange={(e) => setIsAutoPlay(e.target.checked)}
+                  onChange={(e) => {
+                    logAmplitudeEvent("auto_play_toggled", {
+                      enabled: e.target.checked,
+                    });
+
+                    setIsAutoPlay(e.target.checked);
+                  }}
                   className="rounded"
                 />
                 <span className="text-sm">자동 재생</span>
