@@ -1,8 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Caveat:wght@400;500;600;700&display=swap");
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --primary-purple: #c084fc;
@@ -60,7 +58,6 @@ a {
   background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
   transform: translateY(-50%);
 }
-
 
 .vintage-radio {
   background: linear-gradient(145deg, #a78bfa, #8b5cf6);

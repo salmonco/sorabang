@@ -133,7 +133,7 @@ export default function Home() {
               ) : (
                 <div className="flex items-center justify-center space-x-2">
                   <Sparkles size={20} />
-                  <span>목소리 방 만들기</span>
+                  <span className="text-lg">목소리 방 만들기</span>
                 </div>
               )}
             </motion.button>
