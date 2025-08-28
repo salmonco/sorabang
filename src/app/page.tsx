@@ -2,7 +2,7 @@
 
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
-import { Heart, Mic, Mail, Sparkles, Users } from "lucide-react";
+import { Heart, Mail, Mic, Sparkles, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -52,7 +52,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-2"
         >
           <div className="mb-6">
             <motion.div
@@ -64,22 +64,19 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <h1 className="handwriting text-7xl font-bold gradient-text mb-4">
+          <h1 className="handwriting text-6xl font-bold gradient-text mb-2">
             목소리 편지
           </h1>
-          <p className="text-purple-700 text-xl mb-2 font-medium">
-            voice letter
-          </p>
 
           {/* 브랜드 슬로건 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="glass-warm rounded-2xl p-4 mb-6 border border-yellow-200"
+            className="glass-warm rounded-2xl p-1 border border-yellow-200"
           >
-            <p className="handwriting text-2xl text-purple-800 font-semibold">
-              {`" 마음을 녹음하다. 마음을 전하다. "`}
+            <p className="handwriting text-xl text-purple-800 font-semibold">
+              마음을 전하는 새로운 방법
             </p>
           </motion.div>
         </motion.div>
@@ -89,23 +86,26 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="glass-purple rounded-3xl p-8 border border-purple-200 warm-shadow"
+          className="glass-purple rounded-3xl p-4 border border-purple-200 warm-shadow"
         >
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-purple-800 mb-2">
               새로운 목소리 방 만들기
             </h2>
             <p className="text-purple-600">
-              친구들이 따뜻한 목소리를 남길 수 있는 특별한 공간을 만들어보세요
+              따뜻한 목소리를 남길 수 있는 특별한 공간을 만들어보세요
             </p>
           </div>
 
           <form onSubmit={handleCreateRoom} className="space-y-6">
             <div>
-              <span className="block text-purple-800 font-medium mb-3 flex items-center space-x-2">
+              <label
+                className="text-purple-800 font-medium mb-3 flex items-center space-x-2"
+                htmlFor="roomTitle"
+              >
                 <Heart className="text-pink-500" size={20} />
                 <span>목소리 방 제목</span>
-              </span>
+              </label>
               <input
                 type="text"
                 name="roomTitle"

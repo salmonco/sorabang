@@ -261,7 +261,6 @@ export default function ListenPage({
             <Radio size={40} />
             <span>{roomData.title}</span>
           </h1>
-          
         </motion.div>
 
         {/* 메인 플레이어 */}
@@ -335,7 +334,7 @@ export default function ListenPage({
               {isPlaying ? (
                 <Pause className="text-purple-900" size={40} />
               ) : (
-                <Play className="text-purple-900 ml-2" size={40} />
+                <Play className="text-purple-900" size={40} />
               )}
             </motion.button>
 
@@ -428,7 +427,7 @@ export default function ListenPage({
           transition={{ delay: 0.2 }}
           className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20"
         >
-          <h3 className="text-xl font-bold text-white mb-4">📻 방송 목록</h3>
+          <h3 className="text-xl font-bold text-white mb-4">💌 편지 목록</h3>
           <div className="space-y-3">
             {roomData.messages.map((message, index) => (
               <motion.div

@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import {
   Clock,
   Copy,
+  Mail,
   Mic,
   Pause,
   Play,
-  Mail,
   Share2,
   Square,
   User,
@@ -447,16 +447,21 @@ export default function RoomManage({
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-purple-800 font-medium mb-2 flex items-center space-x-2">
+                <label
+                  className="text-purple-800 font-medium mb-2 flex items-center space-x-2"
+                  htmlFor="nickname"
+                >
                   <User size={16} />
                   <span>닉네임</span>
                 </label>
                 <input
                   type="text"
+                  name="nickname"
+                  id="nickname"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                   placeholder="닉네임을 입력하세요"
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-200 focus:outline-none focus:border-purple-400 focus:bg-white/20 transition-all"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-purple-800 placeholder-purple-400 focus:outline-none focus:border-purple-400 focus:bg-white/20 transition-all"
                   disabled={isSubmitting}
                   maxLength={20}
                 />
@@ -509,10 +514,10 @@ export default function RoomManage({
                           {isPlaying ? (
                             <Pause className="text-white" size={16} />
                           ) : (
-                            <Play className="text-white ml-0.5" size={16} />
+                            <Play className="text-white" size={16} />
                           )}
                         </button>
-                        <span className="text-white text-sm">
+                        <span className="text-purple-600 text-sm">
                           녹음 시간: {formatTime(recording.duration)}
                         </span>
                         <button
@@ -528,7 +533,7 @@ export default function RoomManage({
                           }}
                           className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-xs"
                         >
-                          다시 녹음
+                          재녹음
                         </button>
                       </div>
                     </div>
@@ -544,7 +549,7 @@ export default function RoomManage({
                 whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               >
-                {isSubmitting ? "전송 중..." : "메시지 남기기"}
+                {isSubmitting ? "저장 중..." : "메시지 남기기"}
               </motion.button>
             </form>
             {recording.audioUrl && (
