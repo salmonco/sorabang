@@ -1,5 +1,6 @@
 "use client";
 
+import { logAmplitudeEvent } from "@/lib/analytics";
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
 import { Heart, Sparkles } from "lucide-react";
@@ -15,6 +16,10 @@ export const RoomFormClient = () => {
 
   const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    logAmplitudeEvent("create_room_attempt", {
+      room_title: roomTitle,
+    });
 
     if (!roomTitle.trim()) {
       toast.error("목소리 방 제목을 입력해주세요.");
@@ -33,10 +38,20 @@ export const RoomFormClient = () => {
 
       if (error) throw error;
 
+      logAmplitudeEvent("create_room_success", {
+        room_id: data.id,
+        room_title: roomTitle,
+      });
+
       toast.success("목소리 방이 생성되었습니다! 🎉");
 
       router.push(`/room/${data.id}/manage`);
     } catch (error) {
+      logAmplitudeEvent("create_room_failure", {
+        room_title: roomTitle,
+        error,
+      });
+
       console.error("Error creating room:", error);
       toast.error("목소리 방 생성에 실패했습니다.");
     } finally {

@@ -126,9 +126,10 @@ const ListenPage = ({ params }: { params: Promise<{ roomId: string }> }) => {
         audio.src = currentMessage.audio_url;
         audio.load();
         if (isPlaying) {
-          audio.play().catch((e) => console.error("Auto-play error:", e));
           // 녹음 한 개당 평균 청취 횟수
           logAmplitudeEvent("audio_played", { messageId: currentMessage.id });
+
+          audio.play().catch((e) => console.error("Auto-play error:", e));
         }
       }
     }
@@ -140,9 +141,23 @@ const ListenPage = ({ params }: { params: Promise<{ roomId: string }> }) => {
 
     try {
       if (isPlaying) {
+        logAmplitudeEvent("audio_paused_clicked", {
+          messageId: currentMessage.id,
+          audio_url: currentMessage.audio_url,
+          nickname: currentMessage.nickname,
+          duration: currentMessage.duration,
+        });
+
         audio.pause();
         setIsPlaying(false);
       } else {
+        logAmplitudeEvent("audio_played_clicked", {
+          messageId: currentMessage.id,
+          audio_url: currentMessage.audio_url,
+          nickname: currentMessage.nickname,
+          duration: currentMessage.duration,
+        });
+
         // base64 데이터 URL 직접 사용
         if (currentMessage.audio_url) {
           audio.src = currentMessage.audio_url;
@@ -160,6 +175,13 @@ const ListenPage = ({ params }: { params: Promise<{ roomId: string }> }) => {
   };
 
   const handleNext = () => {
+    logAmplitudeEvent("audio_next_clicked", {
+      messageId: currentMessage.id,
+      audio_url: currentMessage.audio_url,
+      nickname: currentMessage.nickname,
+      duration: currentMessage.duration,
+    });
+
     if (!roomData || currentIndex >= roomData.messages.length - 1) return;
 
     const audio = audioRef.current;
@@ -191,6 +213,13 @@ const ListenPage = ({ params }: { params: Promise<{ roomId: string }> }) => {
   };
 
   const handlePrevious = () => {
+    logAmplitudeEvent("audio_previous_clicked", {
+      messageId: currentMessage.id,
+      audio_url: currentMessage.audio_url,
+      nickname: currentMessage.nickname,
+      duration: currentMessage.duration,
+    });
+
     if (currentIndex <= 0) return;
 
     const audio = audioRef.current;
@@ -222,11 +251,27 @@ const ListenPage = ({ params }: { params: Promise<{ roomId: string }> }) => {
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    logAmplitudeEvent("volume_changed", {
+      messageId: currentMessage.id,
+      audio_url: currentMessage.audio_url,
+      nickname: currentMessage.nickname,
+      duration: currentMessage.duration,
+      volume: e.target.value,
+    });
+
     const newVolume = parseInt(e.target.value);
     setVolume(newVolume);
   };
 
   const toggleMute = () => {
+    logAmplitudeEvent("mute_toggled", {
+      messageId: currentMessage.id,
+      audio_url: currentMessage.audio_url,
+      nickname: currentMessage.nickname,
+      duration: currentMessage.duration,
+      isMuted: !isMuted,
+    });
+
     setIsMuted(!isMuted);
   };
 
@@ -439,6 +484,13 @@ const ListenPage = ({ params }: { params: Promise<{ roomId: string }> }) => {
                       : "bg-white/5 hover:bg-white/10"
                   }`}
                   onClick={() => {
+                    logAmplitudeEvent("audio_message_clicked", {
+                      messageId: message.id,
+                      audio_url: message.audio_url,
+                      nickname: message.nickname,
+                      duration: message.duration,
+                    });
+
                     const audio = audioRef.current;
                     if (audio) {
                       audio.pause();

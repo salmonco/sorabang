@@ -90,40 +90,50 @@ const RoomManagePage = ({
       } else {
         setRoomData(data);
         const baseUrl = window.location.origin;
-        setShareUrl(`${baseUrl}/room/${roomId}/manage`);
-        setListenUrl(`${baseUrl}/room/${roomId}/listen`);
+        const parameter = new URLSearchParams({ ref: "shared" });
+        setShareUrl(`${baseUrl}/room/${roomId}/manage?${parameter}`);
+        setListenUrl(`${baseUrl}/room/${roomId}/listen?${parameter}`);
       }
     };
 
     fetchRoomData();
   }, [resolvedParams, router]);
 
-  const copyToClipboard = async (text: string, label: string) => {
+  const copyToClipboard = async (url: string, label: string) => {
+    logAmplitudeEvent("link_copied", { url, label });
+
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(url);
       toast.success(`${label} 링크가 복사되었습니다! 📋`);
     } catch {
       toast.error("링크 복사에 실패했습니다.");
     }
   };
 
-  const shareLink = async (text: string, title: string) => {
+  const shareLink = async (url: string, label: string) => {
+    logAmplitudeEvent("link_shared", { url, label });
+
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${roomData?.title} - ${title}`,
+          title: `${roomData?.title} - ${label}`,
           text: "따뜻한 음성 메시지를 남겨주세요!",
-          url: text,
+          url,
         });
       } catch {
-        copyToClipboard(text, title);
+        copyToClipboard(url, label);
       }
     } else {
-      copyToClipboard(text, title);
+      copyToClipboard(url, label);
     }
   };
 
   const startRecording = async () => {
+    logAmplitudeEvent("recording_started", {
+      room_id: roomData?.id,
+      room_title: roomData?.title,
+    });
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
@@ -198,6 +208,11 @@ const RoomManagePage = ({
   };
 
   const stopRecording = () => {
+    logAmplitudeEvent("recording_stopped", {
+      room_id: roomData?.id,
+      room_title: roomData?.title,
+    });
+
     if (mediaRecorderRef.current && recording.isRecording) {
       mediaRecorderRef.current.stop();
       if (timerRef.current) {
@@ -214,9 +229,19 @@ const RoomManagePage = ({
 
     try {
       if (isPlaying) {
+        logAmplitudeEvent("recording_paused", {
+          room_id: roomData?.id,
+          room_title: roomData?.title,
+        });
+
         audio.pause();
         setIsPlaying(false);
       } else {
+        logAmplitudeEvent("recording_played", {
+          room_id: roomData?.id,
+          room_title: roomData?.title,
+        });
+
         audio.src = recording.audioUrl;
         audio.load();
 
@@ -230,8 +255,28 @@ const RoomManagePage = ({
     }
   };
 
+  const handleRerecording = () => {
+    logAmplitudeEvent("audio_rerecorded", {
+      room_id: roomData?.id,
+      room_title: roomData?.title,
+    });
+
+    setRecording({
+      isRecording: false,
+      duration: 0,
+      audioBlob: null,
+      audioUrl: null,
+    });
+    setIsPlaying(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    logAmplitudeEvent("recording_submit_attempt", {
+      room_id: roomData?.id,
+      room_title: roomData?.title,
+    });
 
     if (!nickname.trim()) {
       toast.error("닉네임을 입력해주세요.");
@@ -285,7 +330,11 @@ const RoomManagePage = ({
         eventProperties.ref = "shared";
       }
       // 초대링크로 들어온 사람의 녹음 참여율, 한 사람당 평균 녹음 수
-      logAmplitudeEvent("recording_submitted", eventProperties);
+      logAmplitudeEvent("recording_submitted_success", {
+        room_id: roomData?.id,
+        room_title: roomData?.title,
+        ...eventProperties,
+      });
 
       // Reset recording state
       setRecording({
@@ -300,6 +349,12 @@ const RoomManagePage = ({
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
     } catch (error) {
+      logAmplitudeEvent("recording_submit_failure", {
+        room_id: roomData?.id,
+        room_title: roomData?.title,
+        error,
+      });
+
       console.error("Error submitting message:", error);
       toast.error("메시지 추가에 실패했습니다.");
     } finally {
@@ -542,15 +597,7 @@ const RoomManagePage = ({
                           </span>
                           <button
                             type="button"
-                            onClick={() => {
-                              setRecording({
-                                isRecording: false,
-                                duration: 0,
-                                audioBlob: null,
-                                audioUrl: null,
-                              });
-                              setIsPlaying(false);
-                            }}
+                            onClick={handleRerecording}
                             className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-xs"
                           >
                             재녹음

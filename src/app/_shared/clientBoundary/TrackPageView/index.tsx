@@ -7,6 +7,7 @@ export const TrackPageView = () => {
   useEffect(() => {
     logAmplitudeEvent("page_view", {
       page_path: window.location.pathname,
+      search_params: window.location.search,
     });
   }, []);
 
