@@ -8,7 +8,7 @@ import {
   Mic,
   Pause,
   Play,
-  Radio,
+  Mail,
   Share2,
   Square,
   User,
@@ -325,7 +325,7 @@ export default function RoomManage({
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               className="inline-block text-6xl"
             >
-              📻
+              💌
             </motion.div>
           </div>
           <h1 className="handwriting text-5xl font-bold gradient-text mb-2">
@@ -345,7 +345,7 @@ export default function RoomManage({
             className="glass-warm rounded-3xl p-6 border border-yellow-200 warm-shadow"
           >
             <div className="text-center mb-6">
-              <div className="vintage-radio w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Share2 className="text-white" size={24} />
               </div>
               <h2 className="handwriting text-2xl font-bold text-purple-800 mb-2">
@@ -382,7 +382,7 @@ export default function RoomManage({
             </div>
           </motion.div>
 
-          {/* 라디오 링크 공유 카드 */}
+          {/* 편지 듣기 링크 공유 */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -391,13 +391,13 @@ export default function RoomManage({
           >
             <div className="text-center mb-6">
               <div className="cassette-tape w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Radio className="text-purple-600" size={24} />
+                <Mail className="text-purple-600" size={24} />
               </div>
               <h2 className="handwriting text-2xl font-bold text-purple-800 mb-2">
-                라디오 방송 듣기
+                편지 듣기
               </h2>
               <p className="text-purple-600 text-sm">
-                모든 음성 메시지를 라디오처럼 들으려면 이 링크를 공유하세요.
+                모든 음성 메시지를 편지처럼 들으려면 이 링크를 공유하세요.
               </p>
             </div>
 
@@ -410,14 +410,14 @@ export default function RoomManage({
 
               <div className="flex space-x-3">
                 <button
-                  onClick={() => copyToClipboard(listenUrl, "라디오 듣기")}
+                  onClick={() => copyToClipboard(listenUrl, "편지 듣기")}
                   className="flex-1 py-3 glass-purple text-purple-700 rounded-xl hover:bg-purple-100 transition-colors flex items-center justify-center space-x-2 border border-purple-200"
                 >
                   <Copy size={18} />
                   <span>복사</span>
                 </button>
                 <button
-                  onClick={() => shareLink(listenUrl, "라디오 듣기")}
+                  onClick={() => shareLink(listenUrl, "편지 듣기")}
                   className="flex-1 py-3 cream-gradient text-purple-800 rounded-xl hover:shadow-lg transition-all flex items-center justify-center space-x-2 font-medium"
                 >
                   <Share2 size={18} />

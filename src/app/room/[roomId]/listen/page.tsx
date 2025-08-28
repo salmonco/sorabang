@@ -261,7 +261,7 @@ export default function ListenPage({
             <Radio size={40} />
             <span>{roomData.title}</span>
           </h1>
-          <p className="text-purple-200 text-lg">🎧 당신을 위한 라디오 방송</p>
+          
         </motion.div>
 
         {/* 메인 플레이어 */}

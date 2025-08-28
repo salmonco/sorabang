@@ -9,22 +9,22 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "소라방 - 소리 라디오 방",
-  description: "웹 기반 음성 디지털 편지와 감성형 라디오 서비스",
-  keywords: ["라디오", "음성편지", "감성", "소라방", "음성메시지"],
-  authors: [{ name: "소라방 팀" }],
+  title: "목소리 편지",
+  description: "웹 기반 음성 디지털 편지 서비스",
+  keywords: ["음성편지", "감성", "목소리 편지", "음성메시지"],
+  authors: [{ name: "목소리 편지 팀" }],
   viewport: "width=device-width, initial-scale=1",
   themeColor: "#8b5cf6",
   openGraph: {
-    title: "소라방 - 소리 라디오 방",
-    description: "웹 기반 음성 디지털 편지와 감성형 라디오 서비스",
+    title: "목소리 편지",
+    description: "웹 기반 음성 디지털 편지 서비스",
     type: "website",
     locale: "ko_KR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "소라방 - 소리 라디오 방",
-    description: "웹 기반 음성 디지털 편지와 감성형 라디오 서비스",
+    title: "목소리 편지",
+    description: "웹 기반 음성 디지털 편지 서비스",
   },
 };
 

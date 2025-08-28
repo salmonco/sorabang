@@ -2,7 +2,7 @@
 
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
-import { Heart, Mic, Radio, Sparkles, Users } from "lucide-react";
+import { Heart, Mic, Mail, Sparkles, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -60,19 +60,17 @@ export default function Home() {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               className="inline-block text-8xl mb-4"
             >
-              📻
+              💌
             </motion.div>
           </div>
 
           <h1 className="handwriting text-7xl font-bold gradient-text mb-4">
-            소라방
+            목소리 편지
           </h1>
           <p className="text-purple-700 text-xl mb-2 font-medium">
-            소리 라디오 방
+            voice letter
           </p>
-          <p className="text-purple-600 text-lg mb-4">
-            나만을 위한 비밀 라디오 방송
-          </p>
+          
 
           {/* 브랜드 슬로건 */}
           <motion.div
@@ -95,11 +93,11 @@ export default function Home() {
           className="glass-purple rounded-3xl p-8 border border-purple-200 warm-shadow"
         >
           <div className="text-center mb-8">
-            <div className="vintage-radio w-20 h-20 flex items-center justify-center mx-auto mb-4">
-              <Radio className="text-white" size={32} />
+            <div className="w-20 h-20 flex items-center justify-center mx-auto mb-4">
+              <Mail className="text-white" size={32} />
             </div>
             <h2 className="text-2xl font-bold text-purple-800 mb-2">
-              새로운 라디오 방 만들기
+              새로운 목소리 방 만들기
             </h2>
             <p className="text-purple-600">
               친구들이 따뜻한 목소리를 남길 수 있는 특별한 공간을 만들어보세요
@@ -116,7 +114,7 @@ export default function Home() {
                 type="text"
                 value={roomTitle}
                 onChange={(e) => setRoomTitle(e.target.value)}
-                placeholder="예: 지수의 생일 라디오 📻"
+                placeholder="예: 지수의 생일 편지 💌"
                 className="w-full px-4 py-4 glass-warm border border-yellow-200 rounded-xl text-purple-800 placeholder-purple-400 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-200 transition-all text-lg"
                 disabled={isCreating}
               />
@@ -137,7 +135,7 @@ export default function Home() {
               ) : (
                 <div className="flex items-center justify-center space-x-2">
                   <Sparkles size={20} />
-                  <span>라디오 방 만들기</span>
+                  <span>목소리 방 만들기</span>
                 </div>
               )}
             </motion.button>
@@ -175,14 +173,14 @@ export default function Home() {
               </div>
               <div className="text-center">
                 <div className="cassette-tape w-12 h-12 flex items-center justify-center mx-auto mb-2">
-                  <Radio className="text-orange-500" size={20} />
+                  <Mail className="text-orange-500" size={20} />
                 </div>
                 <p className="text-purple-600">
                   <span className="font-medium text-purple-800">
-                    3. 라디오 감상
+                    3. 편지 감상
                   </span>
                   <br />
-                  모든 메시지를 라디오처럼 들어요
+                  모든 메시지를 편지처럼 들어요
                 </p>
               </div>
             </div>
