@@ -42,11 +42,11 @@ interface RecordingState {
   audioUrl: string | null;
 }
 
-export default function RoomManage({
+const RoomManagePage = ({
   params,
 }: {
   params: Promise<{ roomId: string }>;
-}) {
+}) => {
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [shareUrl, setShareUrl] = useState("");
   const [listenUrl, setListenUrl] = useState("");
@@ -648,4 +648,6 @@ export default function RoomManage({
       </div>
     </div>
   );
-}
+};
+
+export default RoomManagePage;

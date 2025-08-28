@@ -32,11 +32,7 @@ interface RoomData {
   messages: VoiceMessage[];
 }
 
-export default function ListenPage({
-  params,
-}: {
-  params: Promise<{ roomId: string }>;
-}) {
+const ListenPage = ({ params }: { params: Promise<{ roomId: string }> }) => {
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -493,4 +489,6 @@ export default function ListenPage({
       </div>
     </div>
   );
-}
+};
+
+export default ListenPage;
