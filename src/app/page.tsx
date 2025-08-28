@@ -16,7 +16,7 @@ export default function Home() {
     e.preventDefault();
 
     if (!roomTitle.trim()) {
-      toast.error("모임 제목을 입력해주세요.");
+      toast.error("목소리 방 제목을 입력해주세요.");
       return;
     }
 
@@ -32,12 +32,12 @@ export default function Home() {
 
       if (error) throw error;
 
-      toast.success("모임이 생성되었습니다! 🎉");
+      toast.success("목소리 방이 생성되었습니다! 🎉");
 
       router.push(`/room/${data.id}/manage`);
     } catch (error) {
       console.error("Error creating room:", error);
-      toast.error("모임 생성에 실패했습니다.");
+      toast.error("목소리 방 생성에 실패했습니다.");
     } finally {
       setIsCreating(false);
     }
@@ -70,7 +70,6 @@ export default function Home() {
           <p className="text-purple-700 text-xl mb-2 font-medium">
             voice letter
           </p>
-          
 
           {/* 브랜드 슬로건 */}
           <motion.div
@@ -80,7 +79,7 @@ export default function Home() {
             className="glass-warm rounded-2xl p-4 mb-6 border border-yellow-200"
           >
             <p className="handwriting text-2xl text-purple-800 font-semibold">
-              &ldquo;마음을 녹음하다. 마음을 전하다.&rdquo;
+              {`" 마음을 녹음하다. 마음을 전하다. "`}
             </p>
           </motion.div>
         </motion.div>
@@ -93,9 +92,6 @@ export default function Home() {
           className="glass-purple rounded-3xl p-8 border border-purple-200 warm-shadow"
         >
           <div className="text-center mb-8">
-            <div className="w-20 h-20 flex items-center justify-center mx-auto mb-4">
-              <Mail className="text-white" size={32} />
-            </div>
             <h2 className="text-2xl font-bold text-purple-800 mb-2">
               새로운 목소리 방 만들기
             </h2>
@@ -106,12 +102,14 @@ export default function Home() {
 
           <form onSubmit={handleCreateRoom} className="space-y-6">
             <div>
-              <label className="block text-purple-800 font-medium mb-3 flex items-center space-x-2">
+              <span className="block text-purple-800 font-medium mb-3 flex items-center space-x-2">
                 <Heart className="text-pink-500" size={20} />
-                <span>모임 제목</span>
-              </label>
+                <span>목소리 방 제목</span>
+              </span>
               <input
                 type="text"
+                name="roomTitle"
+                id="roomTitle"
                 value={roomTitle}
                 onChange={(e) => setRoomTitle(e.target.value)}
                 placeholder="예: 지수의 생일 편지 💌"
@@ -153,7 +151,7 @@ export default function Home() {
                 </div>
                 <p className="text-purple-600">
                   <span className="font-medium text-purple-800">
-                    1. 모임 생성
+                    1. 목소리 방 생성
                   </span>
                   <br />
                   제목을 입력하고 링크를 만들어요
